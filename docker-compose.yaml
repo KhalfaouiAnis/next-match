@@ -1,0 +1,8 @@
+services:
+  postgres:
+    image: postgres
+    container_name: postgres_next_match
+    environment:
+      - POSTGRES_PASSWORD=postgrespw
+    ports:
+      - 5432:5432
