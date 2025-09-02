@@ -5,7 +5,7 @@ export default async function Home() {
   const session = await auth();
 
   return (
-    <div className="">
+    <div className="flex flex-col justify-center items-center mt-20 gap-6 text-secondary">
       <h3 className="text-2xl font-semibold">User session data</h3>
       {
         session ? (
