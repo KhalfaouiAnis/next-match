@@ -6,9 +6,11 @@ import NavLink from "./NavLink"
 import { auth } from "@/auth"
 import UserMenu from "./UserMenu"
 import { Fragment } from "react"
+import { getUserInfoForNav } from "@/app/actions/userActions"
 
 export default async function TopNav() {
     const session = await auth();
+    const userInfo = session?.user && await getUserInfoForNav();
 
     return (
         <Navbar maxWidth="xl" className="bg-gradient-to-r from-purple-400 to-purple-700"
@@ -30,8 +32,8 @@ export default async function TopNav() {
             </NavbarContent>
             <NavbarContent justify="end">
                 {
-                    session?.user ? (
-                        <UserMenu user={session.user} />
+                    userInfo ? (
+                        <UserMenu userInfo={userInfo} />
                     ) : (
                         <Fragment>
                             <Button as={Link} href="/login" variant="bordered" className="text-white">Login</Button>

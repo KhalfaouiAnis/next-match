@@ -39,6 +39,11 @@ async function seedMembers() {
 async function main() {
   await seedMembers();
 }
+/**
+ * npx prisma generate
+ * npx prisma db push
+ * npx prisma db seed
+ */
 
 main()
   .catch((err) => {

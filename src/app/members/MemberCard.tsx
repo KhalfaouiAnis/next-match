@@ -4,7 +4,7 @@ import { Card, CardFooter } from "@heroui/card"
 import { Image } from "@heroui/image"
 import { Member } from "@/generated/prisma"
 import Link from "next/link"
-import { calculateAge } from "@/lib/util"
+import { calculateAge, transformImageUrl } from "@/lib/util"
 import LikeButton from "@/components/LikeButton"
 import { MouseEvent } from "react"
 
@@ -22,7 +22,8 @@ export default function MemberCard({ member, likeIds }: Props) {
     }
 
     return (
-        <Card fullWidth
+        <Card 
+            fullWidth
             as={Link}
             href={`/members/${member.userId}`}
             isPressable
@@ -31,7 +32,7 @@ export default function MemberCard({ member, likeIds }: Props) {
                 isZoomed
                 alt={member.name}
                 width={300}
-                src={member.image || '/images/user.png'}
+                src={transformImageUrl(member.image) || '/images/user.png'}
                 className="aspect-square object-cover"
             />
             <div onClick={preventLinkAction}>

@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterSchema, registerSchema } from "@/lib/schemas/registerSchema";
 import { registerUser } from "@/app/actions/authActions";
+import { handleFormServerErrors } from "@/lib/util";
+import { ZodIssue } from "zod/v3";
 
 export default function RegisterForm() {
     const { register, handleSubmit, setError, formState: { errors, isValid, isSubmitting } } = useForm<RegisterSchema>({
@@ -20,14 +22,10 @@ export default function RegisterForm() {
         if (result.status === "success") {
 
         } else {
-            if (Array.isArray(result.error)) {
-                result.error.forEach((e) => {
-                    const fieldName = e.path.join(',') as 'email' | 'name' | 'password';
-                    setError(fieldName, { message: e.message })
-                })
-            } else {
-                setError('root.serverError', { message: result.error })
-            }
+            handleFormServerErrors(
+                { error: result.error as ZodIssue[] | string },
+                setError
+            )
         }
     }
 
