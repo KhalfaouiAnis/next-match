@@ -49,7 +49,6 @@ export default function Filters() {
                     <Select
                         size='sm'
                         fullWidth
-                        placeholder='Order by'
                         label='Order by'
                         variant='bordered'
                         color='secondary'
