@@ -25,7 +25,7 @@ export function Providers({ children, userId }: { children: React.ReactNode, use
         }
     }, [userId, setUnreadCount])
 
-    usePresenceChannel();
+    usePresenceChannel(userId);
     useNotificationChannel(userId)
 
     return (

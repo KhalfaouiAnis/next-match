@@ -5,10 +5,11 @@ import { Slider } from '@heroui/slider';
 import { Select, SelectItem } from '@heroui/select';
 import { useFilters } from '@/hooks/useFilters';
 import { Spinner } from '@heroui/spinner';
+import { Switch } from '@heroui/switch';
 
 export default function Filters() {
     const { genderList, orderByList, filters, isPending, totalCount,
-        selectAge, selectGender, selectOrder } = useFilters()
+        selectAge, selectGender, selectOrder, selectWithPhoto } = useFilters()
 
     return (
         <div className='shadow-md py-2'>
@@ -43,6 +44,15 @@ export default function Filters() {
                         maxValue={99}
                         defaultValue={filters.ageRange}
                         onChangeEnd={(value) => selectAge(value as number[])}
+                    />
+                </div>
+                <div className="flex flex-col items-center">
+                    <p className="text-sm">With photo</p>
+                    <Switch
+                        color='secondary'
+                        defaultSelected
+                        size='sm'
+                        onChange={selectWithPhoto}
                     />
                 </div>
                 <div className="w-1/4">

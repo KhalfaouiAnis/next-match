@@ -2,7 +2,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { FaFemale, FaMale } from "react-icons/fa";
 import useFilterStore from "./useFilterStore";
 import { useShallow } from "zustand/shallow";
-import { useEffect, useTransition } from "react";
+import { ChangeEvent, useEffect, useTransition } from "react";
 import { Selection } from "@heroui/react";
 import { usePaginationStore } from "./usePaginationStore";
 
@@ -16,13 +16,13 @@ export const useFilters = () => {
     pagination: { pageNumber, pageSize, totalCount },
     setPage,
   } = usePaginationStore(useShallow((state) => state));
-  const { gender, ageRange, orderBy } = filters;
+  const { gender, ageRange, orderBy, withPhoto } = filters;
 
   useEffect(() => {
-    if (gender || ageRange || orderBy) {
+    if (gender || ageRange || orderBy || withPhoto) {
       setPage(1);
     }
-  }, [setPage, ageRange, gender, orderBy]);
+  }, [setPage, ageRange, gender, orderBy, withPhoto]);
 
   useEffect(() => {
     startTransition(() => {
@@ -33,10 +33,20 @@ export const useFilters = () => {
       if (orderBy) params.set("orderBy", orderBy);
       if (pageSize) params.set("pageSize", pageSize.toString());
       if (pageNumber) params.set("pageNumber", pageNumber.toString());
+      params.set("withPhoto", withPhoto.toString());
 
       router.replace(`${pathname}?${params}`);
     });
-  }, [ageRange, gender, orderBy, pathname, router, pageSize, pageNumber]);
+  }, [
+    ageRange,
+    gender,
+    orderBy,
+    pathname,
+    router,
+    pageSize,
+    pageNumber,
+    withPhoto,
+  ]);
 
   const orderByList = [
     { label: "Last active", value: "updated" },
@@ -69,6 +79,10 @@ export const useFilters = () => {
     }
   };
 
+  const handleWithPhotoToggle = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilters("withPhoto", e.target.checked as unknown as string);
+  };
+
   return {
     orderByList,
     genderList,
@@ -78,5 +92,6 @@ export const useFilters = () => {
     selectAge: handleAgeSelect,
     selectGender: handleGenderSelect,
     selectOrder: handleOrderSelect,
+    selectWithPhoto: handleWithPhotoToggle,
   };
 };
