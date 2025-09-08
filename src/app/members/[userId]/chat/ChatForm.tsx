@@ -5,14 +5,13 @@ import { messageSchema, MessageSchema } from "@/lib/schemas/messageSchema";
 import { handleFormServerErrors } from "@/lib/util";
 import { Button, Input } from "@heroui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { HiPaperAirplane } from "react-icons/hi2";
 import { ZodIssue } from "zod/v3";
 
 function ChatForm() {
-    const router = useRouter();
     const params = useParams<{ userId: string }>();
 
     const { register, handleSubmit, reset, setError, setFocus, formState: { isSubmitting, isValid, errors } } = useForm<MessageSchema>({
@@ -27,7 +26,6 @@ function ChatForm() {
             handleFormServerErrors({ error: result.error as ZodIssue[] | string }, setError)
         } else {
             reset();
-            router.refresh()
             setTimeout(() => setFocus('text'), 50)
         }
     }

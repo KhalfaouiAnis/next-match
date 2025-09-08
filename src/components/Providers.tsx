@@ -1,10 +1,33 @@
 'use client'
 
+import { getUnreadMessageCount } from '@/app/actions/messageActions'
+import { useMessageStore } from '@/hooks/useMessageStore'
+import { useNotificationChannel } from '@/hooks/useNotificationChannel'
+import { usePresenceChannel } from '@/hooks/usePresenceChannel'
 import { HeroUIProvider } from '@heroui/system'
+import { useCallback, useEffect } from 'react'
 import { ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
+import { useShallow } from 'zustand/shallow'
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children, userId }: { children: React.ReactNode, userId: string | null }) {
+    const { updateUnreadCount } = useMessageStore(useShallow(state => state));
+
+    const setUnreadCount = useCallback((amount: number) => {
+        updateUnreadCount(amount)
+    }, [updateUnreadCount])
+
+    useEffect(() => {
+        if (userId) {
+            getUnreadMessageCount().then(count => {
+                setUnreadCount(count)
+            })
+        }
+    }, [userId, setUnreadCount])
+
+    usePresenceChannel();
+    useNotificationChannel(userId)
+
     return (
         <HeroUIProvider>
             <ToastContainer position='top-right' hideProgressBar className="z-50" />

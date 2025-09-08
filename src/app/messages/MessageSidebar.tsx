@@ -6,8 +6,12 @@ import { useState } from 'react';
 import { GoInbox } from 'react-icons/go';
 import { MdOutlineOutbox } from "react-icons/md";
 import { Chip } from '@heroui/chip';
+import { useMessageStore } from '@/hooks/useMessageStore';
+import { useShallow } from 'zustand/shallow';
 
 export default function MessageSidebar() {
+    const unreadCount = useMessageStore(useShallow(state => state.unreadCount))
+
     const searchParams = useSearchParams()
     const pathname = usePathname()
     const router = useRouter()
@@ -38,7 +42,7 @@ export default function MessageSidebar() {
                     <Icon size={24} />
                     <div className="flex justify-between flex-1">
                         <span>{label}</span>
-                        {chip && <Chip ></Chip>}
+                        {chip && <Chip>{unreadCount}</Chip>}
                     </div>
                 </div>
             ))}
