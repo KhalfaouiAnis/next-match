@@ -10,7 +10,8 @@ import { ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
 import { useShallow } from 'zustand/shallow'
 
-export function Providers({ children, userId }: { children: React.ReactNode, userId: string | null }) {
+export function Providers({ children, userId, profileComplete }:
+    { children: React.ReactNode, userId: string | null, profileComplete: boolean }) {
     const { updateUnreadCount } = useMessageStore(useShallow(state => state));
 
     const setUnreadCount = useCallback((amount: number) => {
@@ -25,8 +26,8 @@ export function Providers({ children, userId }: { children: React.ReactNode, use
         }
     }, [userId, setUnreadCount])
 
-    usePresenceChannel(userId);
-    useNotificationChannel(userId)
+    usePresenceChannel(userId, profileComplete);
+    useNotificationChannel(userId, profileComplete)
 
     return (
         <HeroUIProvider>

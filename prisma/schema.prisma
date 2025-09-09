@@ -9,14 +9,15 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  passwordHash  String
-  image         String?
-  accounts      Account[]
-  member        Member?
+  id              String    @id @default(cuid())
+  name            String?
+  email           String    @unique
+  emailVerified   DateTime?
+  passwordHash    String?
+  image           String?
+  profileComplete Boolean   @default(false)
+  accounts        Account[]
+  member          Member?
 }
 
 model Account {
@@ -90,4 +91,19 @@ model Message {
   senderDeleted    Boolean   @default(false)
   recipientDeleted Boolean   @default(false)
   memberId         String?
+}
+
+model Token {
+  id      String    @id @default(cuid())
+  email   String
+  token   String
+  expires DateTime
+  type    TokenType
+
+  @@unique([email, token])
+}
+
+enum TokenType {
+  VERIFICATION
+  PASSWORD_RESET
 }
