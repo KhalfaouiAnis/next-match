@@ -3,7 +3,6 @@
 import { Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from "@heroui/dropdown"
 import { Avatar } from "@heroui/avatar"
 import Link from "next/link"
-import { signOutUser } from "@/app/actions/authActions"
 import { transformImageUrl } from "@/lib/util"
 import { signOut } from "next-auth/react"
 
