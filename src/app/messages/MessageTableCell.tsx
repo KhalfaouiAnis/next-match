@@ -1,7 +1,10 @@
+import AppModal from "@/components/AppModal";
 import PresenceAvatar from "@/components/PresenceAvatar";
 import { truncateString } from "@/lib/util";
 import { MessageDto } from "@/types";
-import { Button } from "@heroui/button";
+import { Button, ButtonProps } from "@heroui/button";
+import { useDisclosure } from "@heroui/react";
+import { Fragment } from "react";
 import { AiFillDelete } from "react-icons/ai";
 
 type Props = {
@@ -13,8 +16,17 @@ type Props = {
 }
 
 export default function MessageTableCell({ item, columnKey, isOutbox, deleteMessage, isDeleting }: Props) {
-
     const cellValue = item[columnKey as keyof MessageDto];
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const onConfirmDelete = () => {
+        deleteMessage(item)
+    }
+
+    const footerButtons: ButtonProps[] = [
+        { color: 'default', onPress: onClose, children: 'Cancel' },
+        { color: 'secondary', onPress: onConfirmDelete, children: 'Confirm' },
+    ]
 
     switch (columnKey) {
         case "recipientName":
@@ -34,15 +46,25 @@ export default function MessageTableCell({ item, columnKey, isOutbox, deleteMess
                 </div>
             )
         case "created":
-            return cellValue
+            return <div>{cellValue}</div>
         default:
             return (
-                <Button isIconOnly variant="light"
-                    onPress={() => deleteMessage(item)}
-                    isLoading={isDeleting}
-                >
-                    <AiFillDelete size={24} className="text-danger" />
-                </Button>
+                <Fragment>
+                    <Button
+                        isIconOnly variant="light"
+                        onPress={() => onOpen()}
+                        isLoading={isDeleting}
+                    >
+                        <AiFillDelete size={24} className="text-danger" />
+                    </Button>
+                    <AppModal
+                        isOpen={isOpen}
+                        onClose={onClose}
+                        header="Please confirm"
+                        body={<div>Are you sure you want to delete this message?, this action cannot be undone</div>}
+                        footerButtons={footerButtons}
+                    />
+                </Fragment>
             )
     }
 }

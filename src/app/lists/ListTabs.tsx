@@ -5,7 +5,7 @@ import { Tabs, Tab } from "@heroui/tabs";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Fragment, Key, useTransition } from "react";
 import MemberCard from "../members/MemberCard";
-import LoadingComponent from "@/components/LoadingComponent";
+import { Spinner } from "@heroui/spinner";
 
 type Props = {
     members: Member[];
@@ -34,7 +34,10 @@ export default function ListTabs({ members, likeIds }: Props) {
     }
 
     return (
-        <div className="flex w-full flex-col mt-10 gap-5">
+        <div className="flex w-full flex-col mt-10 gap-5 relative">
+            {
+                isPending && <Spinner color="secondary" className="absolute left-[480px]" />
+            }
             <Tabs aria-label="Like tabs"
                 items={tabs}
                 color="secondary"
@@ -42,25 +45,19 @@ export default function ListTabs({ members, likeIds }: Props) {
             >
                 {(item) => (
                     <Tab key={item.id} title={item.label}>
-                        {
-                            isPending ? (
-                                <LoadingComponent />
+                        <Fragment>
+                            {members.length > 0 && !isPending ? (
+                                <div className="p-6 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8">
+                                    {
+                                        members.map(m => (
+                                            <MemberCard key={m.id} member={m} likeIds={likeIds} />
+                                        ))
+                                    }
+                                </div>
                             ) : (
-                                <Fragment>
-                                    {members.length > 0 ? (
-                                        <div className="p-6 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8">
-                                            {
-                                                members.map(m => (
-                                                    <MemberCard key={m.id} member={m} likeIds={likeIds} />
-                                                ))
-                                            }
-                                        </div>
-                                    ) : (
-                                        <div>No members for this filter</div>
-                                    )}
-                                </Fragment>
-                            )
-                        }
+                                <div>No members for this filter</div>
+                            )}
+                        </Fragment>
                     </Tab>
                 )}
             </Tabs>

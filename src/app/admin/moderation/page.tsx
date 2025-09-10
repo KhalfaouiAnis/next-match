@@ -2,6 +2,8 @@ import { Divider } from "@heroui/divider";
 import { getUnapprovedPhotos } from "@/app/actions/adminAction";
 import MemberPhotos from "@/components/MemberPhotos";
 
+export const dynamic = "force-dynamic"
+
 async function PhotoModerationPage() {
     const photos = await getUnapprovedPhotos();
 

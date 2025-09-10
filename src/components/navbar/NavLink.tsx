@@ -14,12 +14,13 @@ type Props = {
 export default function NavLink({ href, label }: Props) {
     const unreadCount = useMessageStore(useShallow(state => state.unreadCount))
     const pathname = usePathname()
+
     return (
         <NavbarItem isActive={pathname === href} as={Link} href={href}>
             <span>
                 {label}
             </span>
-            {href === '/messages' && (
+            {href === '/messages' && unreadCount > 0 && (
                 <span className="ml-1">
                     {unreadCount}
                 </span>
