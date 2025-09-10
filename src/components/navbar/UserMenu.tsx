@@ -5,6 +5,7 @@ import { Avatar } from "@heroui/avatar"
 import Link from "next/link"
 import { signOutUser } from "@/app/actions/authActions"
 import { transformImageUrl } from "@/lib/util"
+import { signOut } from "next-auth/react"
 
 type Props = {
     userInfo :{name: string | null, image: string | null} | null
@@ -33,7 +34,7 @@ export default function UserMenu({ userInfo }: Props) {
                 <DropdownItem key="edit-profile-link" as={Link} href="/members/edit" >
                     Edit profile
                 </DropdownItem>
-                <DropdownItem key="signout-link" color="danger" onPress={async() => await signOutUser()} >
+                <DropdownItem key="signout-link" color="danger" onPress={async() => await signOut({redirect:true, redirectTo: "/"})} >
                     Log out
                 </DropdownItem>
             </DropdownMenu>

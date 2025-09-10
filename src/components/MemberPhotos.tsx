@@ -7,6 +7,7 @@ import StarButton from "./StarButton"
 import { useRouter } from "next/navigation"
 import { Fragment, useState } from "react"
 import { deleteImage, setMainImage } from "@/app/actions/userActions"
+import { toast } from "react-toastify"
 
 type Props = {
     photos: Photo[] | null;
@@ -27,9 +28,20 @@ export default function MemberPhotos({ photos, editing, mainImageUrl }: Props) {
 
         setLoading({ isLoading: true, id: photo.id, type: 'main' });
 
-        await setMainImage(photo);
-        router.refresh();
-        setLoading({ isLoading: false, id: '', type: '' })
+        try {
+            await setMainImage(photo);
+            router.refresh();
+
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                toast.error(error.message)
+            } else {
+                toast.error("Something went wrong")
+            }
+        } finally {
+            setLoading({ isLoading: false, id: '', type: '' })
+        }
+
     }
 
     const onDelete = async (photo: Photo) => {

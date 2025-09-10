@@ -13,6 +13,18 @@ export default async function TopNav() {
     const session = await auth();
     const userInfo = session?.user && await getUserInfoForNav();
 
+    const memberLinks = [
+        { href: '/members', label: 'Matches' },
+        { href: '/lists', label: 'Lists' },
+        { href: '/messages', label: 'Messages' },
+    ]
+
+    const adminLinks = [
+        { href: '/admin/moderation', label: 'Photo moderation' },
+    ]
+
+    const links = session?.user.role === "ADMIN" ? adminLinks : memberLinks
+
     return (
         <Fragment>
             <Navbar maxWidth="xl" className="bg-gradient-to-r from-purple-400 to-purple-700"
@@ -28,9 +40,9 @@ export default async function TopNav() {
                     </div>
                 </NavbarBrand>
                 <NavbarContent justify="center">
-                    <NavLink href="/members" label="Matches" />
-                    <NavLink href="/lists" label="Lists" />
-                    <NavLink href="/messages" label="Messages" />
+                    {links.map(l => (
+                        <NavLink key={l.href} href={l.href} label={l.label} />
+                    ))}
                 </NavbarContent>
                 <NavbarContent justify="end">
                     {
